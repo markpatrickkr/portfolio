@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Patrick's Portfolio</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #333;
+            text-align: center;
+        }
+        
+        header {
+            background-color: #ff6f61;
+            padding: 20px;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            position: relative;
+            animation: slideIn 2s ease-out;
+        }
+        
+        @keyframes slideIn {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .buttons {
+            margin: 20px;
+        }
+        
+        .buttons button {
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: #ff6f61;
+            color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .buttons button:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section {
+            display: none;
+            padding: 20px;
+            margin: 20px auto;
+            background: #e039ae;
+            border-radius: 15px;
+            max-width: 800px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+            position: relative;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Heart Animation */
+        
+        .heart {
+            font-size: 50px;
+            color: red;
+            display: inline-block;
+            animation: popHeart 1s ease-out infinite;
+            margin-left: 10px;
+            opacity: 0;
+        }
+        
+        @keyframes popHeart {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        /* Picture Gallery Styles */
+        
+        .pictures {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #982ce0;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .pictures img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin: 10px;
+            transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+            cursor: pointer;
+        }
+        
+        .pictures img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0.8;
+        }
+        /* Modal for Enlarged Image */
+        
+        #imageModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #imageModal img {
+            max-width: 90%;
+            max-height: 90%;
+            margin: auto;
+            display: block;
+            transform: scale(0);
+            /* Initial scale for zoom-in animation */
+            transition: transform 0.5s ease-in-out;
+            /* Smooth zoom-in transition */
+        }
+        
+        #modalCloseBtn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+        }
+        /* Modal for confirmation */
+        
+        #confirmModal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        #confirmModal p {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        #confirmModal button {
+            padding: 10px 20px;
+            background: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        #confirmModal button:hover {
+            background: #e03e36;
+        }
+        /* Reset Button Style */
+        
+        .reset-btn {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .reset-btn:hover {
+            background-color: #e03e36;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        MARKRISTINE
+    </header>
+
+    <div class="buttons">
+        <button onclick="showSection('message')">Message</button>
+        <button onclick="showSection('me-gf')">Me and My Girlfriend</button>
+        <button onclick="showConfirmModal()">More Memories</button>
+
+        <div class="buttons">
+            <button onclick="window.location.href='fireworks.html'">Go to Fireworks Page</button>
+            <!-- Link to fireworks page -->
+        </div>
+    </div>
+
+    <!-- Reset Button -->
+    <button class="reset-btn" onclick="resetPage()">Reset</button>
+
+    <!-- Message Section -->
+    <div id="message" class="section">
+        <h2>Message for My GF</h2>
+        <p>Hi, love! It's me, your futurehusband, i tatagalog kona hahaha sorry mahal sa mga araw na nag aaway tayo at nasasabihan kita ng mga masasakit na salita at sorry din dun sa gabing nasigawan kita mahal pinag sisisihan kopoyun at kahit diko sinasadja
+            mag sosorry paden ako mak kc mali yun and always remember na ikaw lng mahal i love you forever and ever💖
+            <span class="heart" style="animation-delay: 0s;">❤️</span>
+            <span class="heart" style="animation-delay: 0.2s;">❤️</span>
+            <span class="heart" style="animation-delay: 0.4s;">❤️</span>
+            <span class="heart" style="animation-delay: 0.6s;">❤️</span>
+            <span class="heart" style="animation-delay: 0.8s;">❤️</span>
+        </p>
+    </div>
+
+    <!-- Me and GF Section -->
+    <div id="me-gf" class="section">
+        <h2>Our Memories</h2>
+        <div class="pictures">
+            <img src="museum(1)-fotor-2024112473441.jpg" alt="Memory at the Museum" onclick="openModal(this)">
+            <img src="museum2-fotor-202411248532.jpg" alt="Memory 2" onclick="openModal(this)">
+            <img src="museum3-fotor-20241124934.jpg" alt="Memory 3" onclick="openModal(this)">
+            <img src="museum4-fotor-202411249752.jpg" alt="Memory 4" onclick="openModal(this)">
+        </div>
+    </div>
+
+    <!-- More Memories Section (Initially Hidden) -->
+    <div id="more" class="section">
+        <h2>yey! im your future hustband gusto koding ituloy ang mga ala ala nating dalawa, gagawa ng masasayang ala ala pa! btw i am mark hehe labyou!!!</h2>
+        <div class="pictures">
+            <img src="museum5-fotor-2024112494033.jpg" alt="Memory at the Museum" onclick="openModal(this)">
+            <img src="museum6-fotor-2024112494535.jpg" alt="Memory 2" onclick="openModal(this)">
+            <img src="museum7-fotor-20241124101937.jpg" alt="Memory 3" onclick="openModal(this)">
+            <img src="museum8-fotor-2024112410228.jpg" alt="Memory 4" onclick="openModal(this)">
+            <img src="museum9-fotor-20241124102412.jpg" alt="Memory 5" onclick="openModal(this)">
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <img id="modalImage" src="" alt="Enlarged Image">
+        <button id="modalCloseBtn" onclick="closeModal()">X</button>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal">
+        <p>Do you want to continue you and your boyfriend memories?</p>
+        <button onclick="showMoreMemories()">Yes</button>
+        <button onclick="closeConfirmModal()">No</button>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            var sections = document.querySelectorAll('.section');
+            sections.forEach(function(section) {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Show confirmation modal for More Memories
+        function showConfirmModal() {
+            document.getElementById('confirmModal').style.display = 'flex';
+        }
+
+        // Close the confirmation modal without any action
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+        }
+
+        // Show the More Memories section after confirmation
+        function showMoreMemories() {
+            document.getElementById('confirmModal').style.display = 'none'; // Close confirmation modal
+            document.getElementById('me-gf').classList.remove('active'); // Hide Me and GF Section
+            document.getElementById('more').classList.add('active'); // Show More Memories Section
+        }
+
+        // Open modal with zoom-in effect on image
+        function openModal(image) {
+            var modal = document.getElementById('imageModal');
+            var modalImage = document.getElementById('modalImage');
+            modal.style.display = "flex";
+            modalImage.src = image.src;
+
+            // Apply the zoom-in effect when opening the modal
+            setTimeout(function() {
+                modalImage.style.transform = "scale(1)";
+            }, 10);
+        }
+
+        // Close modal with zoom-out effect
+        function closeModal() {
+            var modal = document.getElementById('imageModal');
+            var modalImage = document.getElementById('modalImage');
+
+            // Zoom-out effect before closing
+            modalImage.style.transform = "scale(0)";
+
+            // Wait for animation to complete before hiding modal
+            setTimeout(function() {
+                modal.style.display = "none";
+            }, 500); // Delay for the zoom-out animation to finish
+        }
+
+        // Reset the page to its initial state
+        function resetPage() {
+            var sections = document.querySelectorAll('.section');
+            sections.forEach(function(section) {
+                section.classList.remove('active'); // Hide all sections
+            });
+            document.getElementById('message').classList.add('active'); // Show only the "Message" section
+        }
+    </script>
+
+</body>
+
+</html>
